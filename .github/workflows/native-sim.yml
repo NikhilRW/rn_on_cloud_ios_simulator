@@ -461,8 +461,8 @@ jobs:
             # Local Metro supplies JS and Fast Refresh over its own tunnel.
             brew install caddy
             nohup caddy reverse-proxy \
-                --from :8080 \
-                --to "$DEV_URL"
+            --from :8081 \
+            --to "$DEV_URL" &
             xcrun simctl openurl "$UDID" "$DEV_URL"
             echo "Opened development client; keep Metro running on your computer"
           elif [ "$BUILD_CONFIGURATION" = "Debug" ]; then
