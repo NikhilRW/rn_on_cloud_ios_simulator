@@ -17,7 +17,7 @@ on:
         required: true
       minutes:
         description: How long to hold the stream open
-        default: "30"
+        default: '30'
       device:
         description: Simulator device name
         default: iPhone 17 Pro
@@ -26,22 +26,22 @@ on:
         default: build
       project_dir:
         description: Expo app directory relative to the repository root
-        default: "."
+        default: '.'
       dev:
         description: Build a development client with manual Metro URL entry (build mode only)
-        default: "false"
+        default: 'false'
       dev_url:
         description: Full development-client link from local expo start --dev-client --tunnel (build mode only)
-        default: ""
+        default: ''
       app_url:
         description: URL of a prebuilt simulator .app archive (mode:app)
-        default: ""
+        default: ''
       app_release_asset:
         description: >-
           Asset name on this repo's `native-sim-build` release to install
           (mode:app). Fetched with the job's own GITHUB_TOKEN, so a private repo
           needs no extra credentials and nothing is publicly downloadable.
-        default: ""
+        default: ''
       transport:
         description: >-
           http (default) or webrtc. webrtc needs a TURN relay, which is a paid,
@@ -57,25 +57,25 @@ on:
           Cap the captured width/height in pixels; 0 keeps native resolution.
           640 was measurably snappier but visibly soft on a retina display, where the
           preview is drawn at ~2x CSS pixels. 900 keeps it sharp.
-        default: "900"
+        default: '900'
       video_fps:
         description:
           MJPEG frame rate. serve-sim defaults to 60, which over a tunnel
           stutters more than a reliably delivered 30 and doubles encode CPU.
-        default: "30"
+        default: '30'
       video_quality:
         description:
           MJPEG quality 0.05-1. Lower means fewer bytes per frame, but it shows
           as compression artefacts rather than softness — reduce fps or dimension first.
-        default: "0.7"
+        default: '0.7'
       export_app:
         description: Upload the built .app as an artifact so it can be downloaded
-        default: "false"
+        default: 'false'
       agent_device:
         description: >-
           Also run an agent-device proxy beside the simulator, reachable at
           <url>/agent-device, so a coding agent on your machine can drive the app.
-        default: "false"
+        default: 'false'
       agent_device_version:
         description:
           agent-device version to install. Pin it — the client and the
@@ -83,10 +83,10 @@ on:
         default: 0.20.1
       scheme:
         description: Xcode scheme (defaults to the generated workspace name)
-        default: ""
+        default: ''
       cache:
         description: Reuse a fingerprint-matched .app instead of rebuilding natively
-        default: "true"
+        default: 'true'
       runner:
         description: Runner label (must be arm64 — serve-sim ships arm64-only binaries)
         default: macos-26
@@ -107,9 +107,9 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       STATUS_CONTEXT: native-sim/${{ inputs.session }}
-      GATE_PORT: "3199"
-      PREVIEW_PORT: "3200"
-      AGENT_PORT: "4310"
+      GATE_PORT: '3199'
+      PREVIEW_PORT: '3200'
+      AGENT_PORT: '4310'
       BUILD_CONFIGURATION: ${{ (inputs.dev == 'true' || inputs.dev_url != '') && 'Debug' || 'Release' }}
 
     steps:
@@ -368,7 +368,7 @@ jobs:
         if: inputs.mode == 'build' && steps.appcache.outputs.cache-hit != 'true'
         env:
           UDID: ${{ steps.sim.outputs.udid }}
-          RCT_NO_LAUNCH_PACKAGER: "1"
+          RCT_NO_LAUNCH_PACKAGER: '1'
         run: |
           set -euo pipefail
           # Dependencies are already installed above, so skip prebuild's own install pass.
@@ -380,17 +380,6 @@ jobs:
           SCHEME='${{ inputs.scheme }}'
           [ -n "$SCHEME" ] || SCHEME=$(basename "$WORKSPACE" .xcworkspace)
           echo "Building scheme '$SCHEME' from $WORKSPACE"
-
-          if [ -n "$DEV_URL" ]; then
-            # Local Metro supplies JS and Fast Refresh over its own tunnel.
-            brew install caddy
-            nohup caddy reverse-proxy \
-            --from http://localhost:8081 \
-            --to "$DEV_URL" &
-            echo "Opened development client; keep Metro running on your computer"
-          elif [ "$BUILD_CONFIGURATION" = "Debug" ]; then
-            echo "Development launcher ready; enter your public Metro URL manually"
-          fi
 
           xcodebuild \
             -workspace "$WORKSPACE" \
@@ -452,6 +441,18 @@ jobs:
           set -euo pipefail
           APP=$(find build/native-sim-app -maxdepth 1 -name '*.app' | head -1)
           [ -n "$APP" ] || { echo "No .app to install"; exit 1; }
+
+          if [ -n "$DEV_URL" ]; then
+            # Local Metro supplies JS and Fast Refresh over its own tunnel.
+            brew install caddy
+            nohup caddy reverse-proxy \
+            --from http://localhost:8081 \
+            --to "$DEV_URL" &
+            sleep 10
+            echo "Opened development client; keep Metro running on your computer"
+          elif [ "$BUILD_CONFIGURATION" = "Debug" ]; then
+            echo "Development launcher ready; enter your public Metro URL manually"
+          fi
 
           if [ "$CACHE_HIT" = "true" ] && [ "$BUILD_CONFIGURATION" = "Release" ]; then
             # The fingerprint ignores app JS, so a reused binary carries a stale
@@ -583,16 +584,16 @@ jobs:
           # as activity. 0 means "run until killed", which is right for native-sim:
           # the hold loop *is* the session and the VM is destroyed with it, so
           # there is nothing to leak by staying up.
-          AGENT_DEVICE_DAEMON_IDLE_TIMEOUT_MS: "0"
-          AGENT_DEVICE_IOS_RUNNER_IDLE_STOP_MS: "0"
+          AGENT_DEVICE_DAEMON_IDLE_TIMEOUT_MS: '0'
+          AGENT_DEVICE_IOS_RUNNER_IDLE_STOP_MS: '0'
           # A second, independent timer: the *device lease* taken by `open`
           # expires after five minutes without commands, and every later command
           # then fails UNAUTHORIZED ("Lease does not match session owner"). That
           # default protects a shared Mac from an agent that wandered off; here
           # the device is single-tenant and dies with the VM, so hold the lease
           # for the job cap instead. Max must move too, or it clamps the default.
-          AGENT_DEVICE_LEASE_TTL_MS: "21600000"
-          AGENT_DEVICE_LEASE_MAX_TTL_MS: "21600000"
+          AGENT_DEVICE_LEASE_TTL_MS: '21600000'
+          AGENT_DEVICE_LEASE_MAX_TTL_MS: '21600000'
         run: |
           set -euo pipefail
           # `proxy` serves the daemon HTTP contract under /agent-device/*, which
@@ -632,10 +633,10 @@ jobs:
         env:
           AGENT_ENABLED: ${{ inputs.agent_device }}
           GATE_TOKEN: ${{ inputs.gate_token }}
-          AGENT_DEVICE_DAEMON_IDLE_TIMEOUT_MS: "0"
-          AGENT_DEVICE_IOS_RUNNER_IDLE_STOP_MS: "0"
-          AGENT_DEVICE_LEASE_TTL_MS: "21600000"
-          AGENT_DEVICE_LEASE_MAX_TTL_MS: "21600000"
+          AGENT_DEVICE_DAEMON_IDLE_TIMEOUT_MS: '0'
+          AGENT_DEVICE_IOS_RUNNER_IDLE_STOP_MS: '0'
+          AGENT_DEVICE_LEASE_TTL_MS: '21600000'
+          AGENT_DEVICE_LEASE_MAX_TTL_MS: '21600000'
         run: |
           set -uo pipefail
           MINUTES=${{ inputs.minutes }}
