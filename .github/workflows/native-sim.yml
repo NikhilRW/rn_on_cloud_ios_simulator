@@ -459,6 +459,7 @@ jobs:
           xcrun simctl launch "$UDID" "$BUNDLE_ID"
           if [ -n "$DEV_URL" ]; then
             # Local Metro supplies JS and Fast Refresh over its own tunnel.
+            brew install caddy
             caddy reverse-proxy \
                 --from :8080 \
                 --to "$DEV_URL"
