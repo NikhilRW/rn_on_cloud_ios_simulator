@@ -381,6 +381,17 @@ jobs:
           [ -n "$SCHEME" ] || SCHEME=$(basename "$WORKSPACE" .xcworkspace)
           echo "Building scheme '$SCHEME' from $WORKSPACE"
 
+          if [ -n "$DEV_URL" ]; then
+            # Local Metro supplies JS and Fast Refresh over its own tunnel.
+            brew install caddy
+            nohup caddy reverse-proxy \
+            --from http://localhost:8081 \
+            --to "$DEV_URL" &
+            echo "Opened development client; keep Metro running on your computer"
+          elif [ "$BUILD_CONFIGURATION" = "Debug" ]; then
+            echo "Development launcher ready; enter your public Metro URL manually"
+          fi
+
           xcodebuild \
             -workspace "$WORKSPACE" \
             -scheme "$SCHEME" \
@@ -457,16 +468,6 @@ jobs:
           BUNDLE_ID=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Info.plist")
           xcrun simctl install "$UDID" "$APP"
           xcrun simctl launch "$UDID" "$BUNDLE_ID"
-          if [ -n "$DEV_URL" ]; then
-            # Local Metro supplies JS and Fast Refresh over its own tunnel.
-            brew install caddy
-            nohup caddy reverse-proxy \
-            --from localhost:8081 \
-            --to "$DEV_URL" &
-            echo "Opened development client; keep Metro running on your computer"
-          elif [ "$BUILD_CONFIGURATION" = "Debug" ]; then
-            echo "Development launcher ready; enter your public Metro URL manually"
-          fi
           echo "Launched $BUNDLE_ID"
 
       - name: Install prebuilt app
