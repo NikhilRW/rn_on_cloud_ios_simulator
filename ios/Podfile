@@ -25,7 +25,6 @@ target 'rn_on_cloud_ios_simulator' do
 
   # Include the React Native Google Maps views and their SDK dependencies.
   pod 'react-native-maps/Google', :path => '../node_modules/react-native-maps'
-  pod 'NativeSuperConfig', :path => '../node_modules/superconfig/NitroSuperconfigNative.podspec'
   post_install do |installer|
     react_native_post_install(
       installer,

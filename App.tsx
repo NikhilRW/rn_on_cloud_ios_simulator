@@ -1,30 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { NativeModules, Platform, StyleSheet, View } from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import MapView, {
   LatLng,
   Marker,
   Polyline,
-  PROVIDER_DEFAULT,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
 import Config from 'react-native-superconfig';
 
-const MAP_PROVIDER =
-  Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT;
-
 const GOOGLE_ROUTES_API_KEY = Config.GOOGLE_ROUTES_API_KEY;
-
-type AppleRoute = {
-  coordinates: LatLng[];
-  distance: number;
-  expectedTravelTime: number;
-};
-
-const { AppleDirections } = NativeModules as {
-  AppleDirections: {
-    getRoute(origin: LatLng, destination: LatLng): Promise<AppleRoute>;
-  };
-};
 
 const firstLocation = {
   latitude: 28.495,
@@ -41,15 +25,6 @@ const App = () => {
 
   useEffect(() => {
     const loadRoute = async () => {
-      if (Platform.OS === 'ios') {
-        const result = await AppleDirections.getRoute(
-          firstLocation,
-          secondLocation,
-        );
-        setRoute(result.coordinates);
-        return;
-      }
-
       setRoute(await loadGoogleRoute(firstLocation, secondLocation));
     };
 
@@ -59,7 +34,7 @@ const App = () => {
   return (
     <View style={styles.container}>
       <MapView
-        provider={MAP_PROVIDER}
+        provider={PROVIDER_GOOGLE}
         mapType="standard"
         style={StyleSheet.absoluteFill}
         initialRegion={{
@@ -85,6 +60,18 @@ async function loadGoogleRoute(
   origin: LatLng,
   destination: LatLng,
 ): Promise<LatLng[]> {
+  const applicationHeaders: Record<string, string> =
+    Platform.OS === 'android'
+      ? {
+          'X-Android-Package': 'com.rn_on_cloud_ios_simulator',
+          'X-Android-Cert':
+            '5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25',
+        }
+      : {
+          'X-Ios-Bundle-Identifier':
+            'org.reactjs.native.example.rn-on-cloud-ios-simulator',
+        };
+
   const response = await fetch(
     'https://routes.googleapis.com/directions/v2:computeRoutes',
     {
@@ -93,9 +80,7 @@ async function loadGoogleRoute(
         'Content-Type': 'application/json',
         'X-Goog-Api-Key': GOOGLE_ROUTES_API_KEY,
         'X-Goog-FieldMask': 'routes.polyline.encodedPolyline',
-        'X-Android-Package': 'com.rn_on_cloud_ios_simulator',
-        'X-Android-Cert':
-          '5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25',
+        ...applicationHeaders,
       },
       body: JSON.stringify({
         origin: {location: {latLng: origin}},
