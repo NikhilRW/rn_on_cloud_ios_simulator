@@ -23,6 +23,7 @@ target 'rn_on_cloud_ios_simulator' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'GoogleMaps', '>= 8.4.0'
   post_install do |installer|
     react_native_post_install(
       installer,
