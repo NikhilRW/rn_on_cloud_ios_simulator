@@ -278,7 +278,7 @@ jobs:
             )
           fi
 
-          npx --yes serve-sim@github:EvanBacon/serve-sim#pull/54/head "${ARGS[@]}" | tee serve-sim.json
+          npx --yes @expo/serve-sim@latest "${ARGS[@]}" | tee serve-sim.json
 
           # /readyz blocks until the simulator and the native capture session are up.
           for _ in $(seq 1 90); do
