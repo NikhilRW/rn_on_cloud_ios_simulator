@@ -23,7 +23,8 @@ target 'rn_on_cloud_ios_simulator' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'GoogleMaps', '>= 8.4.0'
+  # Include the React Native Google Maps views and their SDK dependencies.
+  pod 'react-native-maps/Google', :path => '../node_modules/react-native-maps'
   post_install do |installer|
     react_native_post_install(
       installer,
