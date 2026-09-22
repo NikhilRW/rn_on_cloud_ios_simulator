@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-rn_on_cloud_ios_simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-rn_on_cloud_ios_simulator.a */; };
+		A9D4C0013C7E4B1098F20003 /* AppleDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D4C0013C7E4B1098F20001 /* AppleDirections.swift */; };
+		A9D4C0013C7E4B1098F20004 /* AppleDirectionsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D4C0013C7E4B1098F20002 /* AppleDirectionsBridge.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -15,6 +17,8 @@
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* rn_on_cloud_ios_simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rn_on_cloud_ios_simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D4C0013C7E4B1098F20001 /* AppleDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppleDirections.swift; path = rn_on_cloud_ios_simulator/AppleDirections.swift; sourceTree = "<group>"; };
+		A9D4C0013C7E4B1098F20002 /* AppleDirectionsBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppleDirectionsBridge.m; path = rn_on_cloud_ios_simulator/AppleDirectionsBridge.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rn_on_cloud_ios_simulator/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = rn_on_cloud_ios_simulator/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = rn_on_cloud_ios_simulator/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -42,6 +46,8 @@
 			isa = PBXGroup;
 			children = (
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				A9D4C0013C7E4B1098F20001 /* AppleDirections.swift */,
+				A9D4C0013C7E4B1098F20002 /* AppleDirectionsBridge.m */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -244,6 +250,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9D4C0013C7E4B1098F20003 /* AppleDirections.swift in Sources */,
+				A9D4C0013C7E4B1098F20004 /* AppleDirectionsBridge.m in Sources */,
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
