@@ -223,7 +223,7 @@ jobs:
           # which is the difference between a choppy and a smooth tunnel stream.
           # max-dimension cuts pixels quadratically, saving encode CPU and bytes.
           ARGS=(
-            --detach --quiet
+            --quiet
             --allow-any-host-when-insecure
             --port "$PREVIEW_PORT"
             --max-dimension '${{ inputs.max_dimension }}'
@@ -292,7 +292,11 @@ jobs:
             )
           fi
 
-          npx --yes @expo/serve-sim@latest "${ARGS[@]}" | tee serve-sim.json
+          # Do not use --detach here: serve-sim's detached child doesn't inherit
+          # --allow-any-host-when-insecure, so its preview rejects the tunnel Host.
+          nohup npx --yes @expo/serve-sim@latest "${ARGS[@]}" > serve-sim.json 2> serve-sim.log &
+          SERVE_SIM_PID=$!
+          disown "$SERVE_SIM_PID"
 
           # /readyz blocks until the simulator and the native capture session are up.
           for _ in $(seq 1 90); do
@@ -304,6 +308,7 @@ jobs:
           done
           echo "serve-sim never became ready"
           curl -sS "http://127.0.0.1:$PREVIEW_PORT/healthz" || true
+          cat serve-sim.log >&2 || true
           exit 1
 
       - name: Start auth gate
