@@ -224,7 +224,6 @@ jobs:
           # max-dimension cuts pixels quadratically, saving encode CPU and bytes.
           ARGS=(
             --detach --quiet
-            --allow-any-host-when-insecure
             --port "$PREVIEW_PORT"
             --max-dimension '${{ inputs.max_dimension }}'
             --video-fps '${{ inputs.video_fps }}'
