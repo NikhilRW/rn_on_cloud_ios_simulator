@@ -291,7 +291,7 @@ jobs:
             )
           fi
 
-          npx --yes @expo/serve-sim@0.3.2 "${ARGS[@]}" | tee serve-sim.json
+          npx --yes @expo/serve-sim@0.3.3 "${ARGS[@]}" | tee serve-sim.json
 
           # /readyz blocks until the simulator and the native capture session are up.
           for _ in $(seq 1 90); do
