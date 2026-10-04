@@ -4,25 +4,20 @@ import {StatusBar, StyleSheet, Text, View} from 'react-native';
 const App = () => (
   <View style={styles.screen}>
     <StatusBar hidden />
-
-    <Text style={styles.eyebrow}>REACT NATIVE · iOS SIMULATOR</Text>
-
     <View style={styles.headline}>
-      <Text style={styles.line}>RUNNING APPS</Text>
-      <Text style={styles.line}>WITHOUT A</Text>
-      <Text style={styles.accentLine}>MACBOOK.</Text>
-      <Text style={styles.accentLine}>IPHONE.</Text>
+      <Text style={styles.line}>RUN IOS Apps</Text>
+      <Text style={styles.line}>WITHOUT</Text>
+      <Text style={styles.line}>Any 🍎 Devices Really</Text>
     </View>
-
-    <Text style={styles.footer}>YOUR APP. RUNNING ON iOS. FROM ANYWHERE.</Text>
   </View>
 );
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#000000',
-    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 28,
     paddingTop: 72,
     paddingBottom: 48,
@@ -43,6 +38,8 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: -1.5,
     lineHeight: 48,
+    textAlign: 'center',
+    color:"black"
   },
   accentLine: {
     color: '#A3FF5F',
@@ -50,6 +47,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: -2,
     lineHeight: 62,
+      textAlign: 'center',
   },
   footer: {
     color: '#8A8A8A',
