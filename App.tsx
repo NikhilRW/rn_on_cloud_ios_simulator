@@ -4,7 +4,7 @@ import React from 'react'
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Hello React Native Devs</Text>
+      <Text>Hello React NativeDevs</Text>
     </View>
   )
 }
